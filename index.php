@@ -1,6 +1,8 @@
 <?php
 
-const TOKEN = 'token';
+// transferring the token like this is not advised or secure
+// this is only for testing purposes
+$token = $_REQUEST['token'];
 
 function generateHmac($data, $key)
 {
@@ -36,7 +38,7 @@ function modifyData($data)
 $hmac = $_SERVER['HTTP_X_CONNECTOR_HMAC_SHA256'];
 
 $data = $_REQUEST['jtlrpc'];
-$generatedHmac = generateHmac($data, TOKEN);
+$generatedHmac = generateHmac($data, $token);
 
 if (!hash_equals($hmac, $generatedHmac)) {
     echo 'Invalid HMAC';
@@ -46,7 +48,7 @@ if (!hash_equals($hmac, $generatedHmac)) {
 
 $data = modifyData($data);
 
-$newHmac = generateHmac($data, TOKEN);
+$newHmac = generateHmac($data, $token);
 
 header('X-CONNECTOR-HMAC-SHA256: ' . $newHmac);
 header('Content-Type: application/json');
